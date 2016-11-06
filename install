@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+export DOTFILES_HOME="${HOME}/.dotfiles"
+
+function dowload_and_extract()
+{
+  local DOWNLOAD_LOCATION
+
+  DOWNLOAD_LOCATION=$(mktemp)
+
+  curl https://github.com/tiy-tpa/dotfiles/archive/master.tar.gz --location --output "${DOWNLOAD_LOCATION}"
+
+  mkdir -p "${DOTFILES_HOME}"
+  tar --strip-components 1 -xf "${DOWNLOAD_LOCATION}" -C "${DOTFILES_HOME}"
+}
+
+function install()
+{
+  cd "${DOTFILES_HOME}"
+  ./bin/dot
+}
+
+if [ ! -d "${DOTFILES_HOME}" ]; then
+  dowload_and_extract
+fi
+
+install
